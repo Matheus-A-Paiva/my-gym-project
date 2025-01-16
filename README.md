@@ -1,7 +1,7 @@
 # My Gym - Multi-Tenant Gym Management System
 
 
-<a href="#portuguese">Português</a> | 
+<a href="#portuguese">Português</a> |
 <a href="#english">English</a>
 ---
 
@@ -26,7 +26,7 @@
 Clone o repositório para a sua máquina local usando:
 
 ```bash
-git clone https://github.com/Matheus-A-Paiva/my-gym-project.git
+git clone https://github.com/Matheus-A-Paiva/my-gym-project.git my-gym-project
 ```
 ### Nginx no Laragon
 Certifique-se de estar usando Nginx no seu ambiente Laragon. Você pode alternar para o Nginx selecionando-o no painel do Laragon. Após isso, configure o host virtual conforme mostrado abaixo e reinicie o Nginx para que a configuração tenha efeito.
@@ -36,13 +36,19 @@ Para habilitar o suporte a multi-tenancy para vários domínios, adicione a segu
 
 ```nginx
 server_name gym-manager-multi-tenancy.test *.localhost;
-root "C:/laragon/www/gym-manager-multi-tenancy/public";
+root "C:/laragon/www/my-gym-project/public";
 ```
+### Rodar Composer install
 
-### Rodar Migrations
-Depois da configuração do nginx, rode as migrations:
 ```bash
-php artisan migrate
+composer install
+```
+### Criar .env e rodar Migrations
+Depois de baixar os pacotes com composer, crie o .env baseado no .env.example e rode as migrations com --seed, assim cria um usuário para login:
+```bash
+cp .env.example .env
+
+php artisan migrate --seed
 ```
 ## 📍 Endpoints da API
 Após rodar as migrations, você pode começar a usar a API. Para exemplos de cada endpoint, você pode consultar a documentação do Postman:
@@ -92,7 +98,7 @@ Clone the repository to your local machine using:
 
 
 ```bash
-git clone https://github.com/Matheus-A-Paiva/my-gym-project.git
+git clone https://github.com/Matheus-A-Paiva/my-gym-project.git my-gym-project
 ```
 ### Nginx in Laragon
 Make sure you are using **Nginx** in your Laragon environment. You can switch to Nginx by selecting it from the Laragon dashboard. Afterward, configure the virtual host as shown below and restart Nginx for the configuration to take effect.
@@ -102,19 +108,29 @@ To enable multi-tenancy support for multiple domains, add the following configur
 
 ```nginx
 server_name gym-manager-multi-tenancy.test *.localhost;
-root "C:/laragon/www/gym-manager-multi-tenancy/public";
+root "C:/laragon/www/my-gym-project/public";
 ```
-### Running Migrations
-After Nginx config, run the migrations:
+
+### Run Composer install
+Install the required dependencies by running:
+
 ```bash
-php artisan migrate
+composer install
 ```
+### Create .env and run migrations
+After installing the dependencies, create the .env file based on .env.example and run the migrations with --seed option to create a admin user for login:
+```bash
+cp .env.example .env
+
+php artisan migrate --seed
+```
+
 ## 📍 API Endpoints
 After running the migrations, you can begin using the API. For examples of each endpoint, you can refer to the Postman documentation:
 
 https://documenter.getpostman.com/view/40446855/2sAYQZGrng
 
-## Learned Knowledges
+## Knowledge Gained
 
 ### Multi-Tenancy Setup
 - One of the most interesting aspects I learned was setting up **multi-tenancy** in Laravel. I used the **Tenancy for Laravel** package to create isolated databases for each client, which was a bit challenging, but really rewarding once it worked.
