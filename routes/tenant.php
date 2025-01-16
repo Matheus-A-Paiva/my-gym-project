@@ -10,9 +10,8 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Web\DashboardController;
-use App\Http\Controllers\Web\TenantWebController;
 use App\Http\Middleware\AllowAccessOnlyFromCentralDomains;
+use App\Http\Middleware\InitializeTenancyForAuth;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -20,6 +19,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 Route::middleware([
     'api'
 ])->prefix('api')->group(function () {
+
     Route::middleware(['auth:sanctum', AllowAccessOnlyFromCentralDomains::class])->group(function () {
 
         Route::prefix('tenants')->group(function () {
@@ -91,12 +91,12 @@ Route::middleware([
 
     });
 
-    Route::middleware(['auth:sanctum', InitializeTenancyByDomain::class])->group(function () {
+    Route::middleware(['auth:sanctum', InitializeTenancyForAuth::class])->group(function () {
         Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
             ->name('logout');
     });
 
-    Route::middleware([InitializeTenancyByDomain::class])->group(function () {
+    Route::middleware([InitializeTenancyForAuth::class])->group(function () {
         Route::post('/login', [AuthenticatedSessionController::class, 'store'])
             ->middleware('guest')
             ->name('login');
@@ -104,27 +104,3 @@ Route::middleware([
 });
 
 
-Route::middleware([
-    'web',
-    InitializeTenancyByDomain::class,
-    'tenant.active',
-])->group(function () {
-
-    Route::get('login', function () {
-        return view ('login');
-    });
-
-});
-
-Route::middleware([
-    'web',
-    AllowAccessOnlyFromCentralDomains::class,
-])->group(function () {
-
-    Route::get('login', function () {
-        return view ('login');
-    });
-
-    Route::get('tenants', [TenantWebController::class, 'index']);
-
-});
