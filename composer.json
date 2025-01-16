@@ -1,5 +1,5 @@
 {
-    "name": "MyGym",
+    "name": "matheuspaiva/mygym",
     "type": "project",
     "description": "Gym management with multi-tenancy,",
     "keywords": ["laravel", "framework"],
